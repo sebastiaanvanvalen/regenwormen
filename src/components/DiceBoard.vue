@@ -79,7 +79,8 @@ export default defineComponent({
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            height: 30%;
+            align-items: flex-start;
+            height: auto;
             width: 100%;
         }
 
@@ -87,7 +88,8 @@ export default defineComponent({
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            height: 40%;
+            align-items: flex-end;
+            height: auto;
             width: 100%;
         }
     }

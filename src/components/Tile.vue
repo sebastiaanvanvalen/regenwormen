@@ -1,7 +1,7 @@
 // this needs to be a generic component
 
 <template>
-<div class="container">
+<div class="container" @click="this.pick(this.tile)">
 
     <div v-if="tile.active === true" class="tile-container">
         <p>{{tile.value}}</p>
@@ -21,12 +21,19 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapMutations } from "vuex";
 import { Tile } from '../store/interface/tile';
 
 export default defineComponent({
     name: "Tile",
     props: {
         tile: Object as () => Tile,
+    },
+    methods:{
+        ...mapMutations(['pickTile']),
+        pick(){
+            this.pickTile(this.tile)
+        },
     },
 
 });

@@ -20,16 +20,16 @@ export default defineComponent({
         }
     },
     props: {
-        dice: Object as () => Dice
+        dice: Object as () => Dice,
     },
     methods: {
         amISelected(value) {
             if(this.dice.fixed === true){
                 return
-            }else if(this.dice.value === value && this.dice.fixed !== true) {
-                this.border = "3px solid red"
+            } else if (this.dice.value === value && this.dice.fixed !== true) {
+                this.border = "3px solid red";
             } else {
-                this.border = "none"    
+                this.border = "none";
             }
         },
     },
@@ -92,8 +92,8 @@ export default defineComponent({
     watch: {
         allDice: {
             handler: function(newValue, oldValue) {
-                if(this.dice.fixed === false){
-                    if (newValue[this.dice.id] && newValue[this.dice.id].selected === true){
+                if (this.dice.fixed === false){
+                    if (newValue[this.dice.id] && newValue[this.dice.id].selected === true) {
                         this.border = "3px solid red"
                     } else {
                         this.border = "none"
@@ -122,7 +122,7 @@ export default defineComponent({
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        position: absolute;
+        position: absolute;z
 
         &:before {
             background-color: yellow;
@@ -130,8 +130,9 @@ export default defineComponent({
     }
 
     .doodle {
-        // height: 100%;
-        // width: 100%;
+        position: absolute;
+        height: 100%;
+        width: 100%;
         img {
             height: 100%;
             width: 100%;    

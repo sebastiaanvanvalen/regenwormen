@@ -1,6 +1,6 @@
 <template>
     <div class="button-container">
-        <button 
+        <button
             class="button"
             @click="pushButton()"
             :style="[styleButton]"
@@ -22,13 +22,13 @@ export default defineComponent({
         pushButton() {
             switch (this.parentCommand.function) {
                 case "throw":
-                        this.throwDice();
+                    this.throwDice();
                     break;
                 default:
                     break;
             }
         },
-        ...mapMutations(['throwDice']),
+        ...mapMutations(["throwDice"])
     },
     computed: {
         styleButton() {
@@ -53,8 +53,7 @@ export default defineComponent({
                     break;
             }
             return style;
-        },
-
+        }
     }
 });
 </script>

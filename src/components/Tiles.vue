@@ -37,7 +37,6 @@ export default defineComponent({
         background-color: green;
         height: 200px;
         max-width: 100%;
-        
     }
 
 </style>
