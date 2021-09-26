@@ -1,8 +1,6 @@
-
-// this needs to be a generic component
 <template>
     <div class="button-container">
-        <button
+        <button 
             class="button"
             @click="pushButton()"
             :style="[styleButton]"
@@ -13,7 +11,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import ParentCommand from "./interface/parentCommand.vue";
-import { mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default defineComponent({
     name: "Dice",
@@ -24,14 +22,13 @@ export default defineComponent({
         pushButton() {
             switch (this.parentCommand.function) {
                 case "throw":
-                    console.log("start function throw")
                         this.throwDice();
                     break;
                 default:
                     break;
             }
         },
-        ...mapMutations(['throwDice'])
+        ...mapMutations(['throwDice']),
     },
     computed: {
         styleButton() {
@@ -43,7 +40,6 @@ export default defineComponent({
                     };
                     break;
                 case "throw":
-                    console.log("throw");
                     style = {
                         padding: "16px",
                         fontSize: "18px",
@@ -57,7 +53,8 @@ export default defineComponent({
                     break;
             }
             return style;
-        }
+        },
+
     }
 });
 </script>

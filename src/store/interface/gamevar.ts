@@ -6,7 +6,9 @@ export interface GameVar {
     gameStatus: "empty" | "ready" | "inProgress" | "finished";
     difficulty: "simple" | "hard";
     nrOfPlayers: number;
+    currentPlayerIndex: number;
     players: Player[];
     tiles: Tile[];
     allDice: Dice[];
+    fixedDice: Dice[];
 }

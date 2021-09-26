@@ -2,9 +2,9 @@
 <div class="container">
 
     <div class="board-container">
-        <Player :player="'computer'"/>
+        <Player :player="'1'"/>
         <Tiles class="tiles" :tileMessage="tileMessage" />
-        <Player :player="'YOU'" />
+        <Player :player="'0'" />
     </div>
     <div class="dice-container">
         <DiceBoard />

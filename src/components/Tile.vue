@@ -1,6 +1,5 @@
 // this needs to be a generic component
 
-
 <template>
 <div class="container">
 
@@ -11,7 +10,6 @@
         <img v-else-if="this.tile.doodleValue === 2" src="@/assets/doodles/doodle2.png" :key="this.tile.id" alt="d2" />
         <img v-else-if="this.tile.doodleValue === 3" src="@/assets/doodles/doodle3.png" :key="this.tile.id" alt="d3" />
         <img v-else-if="this.tile.doodleValue === 4" src="@/assets/doodles/doodle4.png" :key="this.tile.id" alt="d4" />
-
 
         <!-- is this (in another form) needed? -->
         <h1 v-else>{{ tile.doodleValue }}</h1>
@@ -35,6 +33,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+
 .tile-container {
     font-family: 'Permanent Marker', cursive;
     font-weight: bold;
@@ -46,21 +45,19 @@ export default defineComponent({
     flex-direction: column;
     justify-content: space-between;
     padding: 4px;
-    margin: 0 4px;
+    margin: 4px;
     border-radius: 5px;
     background-color: rgb(241, 239, 232);
-
-    // border: 1px solid white;
 
     p {
         border-bottom: 4px solid black;
     }
 
-
-        &:hover {
-            transform: scale(1.2);    
-        }
-
+    &:hover {
+        transform: scale(1.4);
+        border: 1px solid #ccc;
+        box-shadow: 0 0 2px 1px white;  
+    }
 }
 
 .back {

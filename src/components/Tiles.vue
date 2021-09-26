@@ -16,9 +16,10 @@ export default defineComponent({
         Tile
     },
     props: ["tileMessage"],
+
     computed: {
         ...mapState(["tiles"])
-        }
+    }
 
 });
 </script>
@@ -34,8 +35,9 @@ export default defineComponent({
         padding: 16px;
         border-radius: 5px;
         background-color: green;
-        height: 30%;
+        height: 200px;
         max-width: 100%;
+        
     }
 
 </style>

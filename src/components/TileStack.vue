@@ -1,5 +1,3 @@
-// this needs to be a generic component that is used within every player comonent
-
 <template>
     <div class="tile-stack-container">
         <p>tilestack</p>
@@ -12,12 +10,13 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "TileStack",
-
+    props: {
+        parent: Object,
+    },
 });
 </script>
 
 <style scoped lang="scss">
-
 
 
 </style>

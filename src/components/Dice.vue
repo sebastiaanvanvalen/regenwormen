@@ -1,9 +1,7 @@
-
-// this needs to be a generic component
 <template>
-    <div @click="selectDice(this.dice.value)" class="dice-container">
-        <div v-if="this.dice.value !== 0 && this.dice.fixed === false" class="dice-cont">
-            <div v-if="this.dice.value !== 6" :style="[styleDice, selectedDice]" class="dice"></div>
+    <div class="dice-container" >
+        <div class="dice-cont" v-bind:style="{border: this.border}">
+            <div v-if="this.dice.value !== 6" :style="[styleDice]" class="dice"></div>
             <div v-else class="doodle" ><img src="@/assets/doodles/doodle.png" alt=""></div>
         </div>
     </div>
@@ -11,32 +9,32 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapState, mapMutations } from 'vuex';
-
+import { mapState } from 'vuex';
 import { Dice } from "../store/interface/dice";
 
 export default defineComponent({
     name: "Dice",
     data() {
         return{
-            diceSelected: false
+            border: "none",
         }
     },
     props: {
         dice: Object as () => Dice
     },
-    methods:{
-        ...mapMutations(['selectDice', 'deSelectDice']),
-        selectedDice() {
-            let style;
-            if(this.diceSelected === true) {
-            this.selectDice
-                style = {border: "3px solid red"}
+    methods: {
+        amISelected(value) {
+            if(this.dice.fixed === true){
+                return
+            }else if(this.dice.value === value && this.dice.fixed !== true) {
+                this.border = "3px solid red"
+            } else {
+                this.border = "none"    
             }
-            return style
         },
     },
     computed: {
+        ...mapState(['allDice']),
         styleDice() {
             let style;
             switch (this.dice.value) {
@@ -49,8 +47,8 @@ export default defineComponent({
                     break;
                 case 2:
                     style = {
-                        top: "30.5px",
-                        left: "5px",
+                        top: "32.5px",
+                        left: "7.5px",
                         display: "inline-block",
                         boxShadow: "25px -25px black",
                     }
@@ -66,8 +64,8 @@ export default defineComponent({
                     break;
                 case 4:
                     style = {
-                        top: "30px",
-                        left: "5px",
+                        top: "32.5px",
+                        left: "7.5px",
                         display: "inline-block",
                         boxShadow: "25px 0px black, 0px -25px black, 25px -25px black",
                     }
@@ -90,19 +88,19 @@ export default defineComponent({
             }
             return style;
         },
-
-        ...mapState(['allDice'])
     },
     watch: {
         allDice: {
             handler: function(newValue, oldValue) {
-                console.log("watching")
-                if (newValue === null) {
-                    this.visible = true;
-                } else {
-                    this.setButtonText(newValue)
+                if(this.dice.fixed === false){
+                    if (newValue[this.dice.id] && newValue[this.dice.id].selected === true){
+                        this.border = "3px solid red"
+                    } else {
+                        this.border = "none"
+                    }
                 }
             },
+            deep: true
         }
     }
 });
@@ -128,7 +126,7 @@ export default defineComponent({
 
         &:before {
             background-color: yellow;
-            }
+        }
     }
 
     .doodle {

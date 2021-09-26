@@ -9,11 +9,15 @@ export const store = createStore({
       gameStatus: "empty",
       difficulty: "simple",
       nrOfPlayers: 2,
+      currentPlayerIndex: 0,
       players: [
         {
           id: "1",
           name: "user",
           playing: true,
+          canThrowDice: true,
+          canFixDice: true,
+          canPickTile: false,
           winStatus: false,
           tilePile: [],
           diceStack: [],
@@ -24,6 +28,9 @@ export const store = createStore({
           id: "2",
           name: "comp",
           playing: false,
+          canThrowDice: false,
+          canFixDice: false,
+          canPickTile: false,
           winStatus: false,
           tilePile: [],
           diceStack: [],
@@ -161,68 +168,26 @@ export const store = createStore({
           active: true
         }
       ],
-      allDice: [
-        {
-          id: "1",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "2",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "3",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "4",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "5",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "6",
-          value: 0,
-          doodle: true,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "7",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        },
-        {
-          id: "8",
-          value: 0,
-          doodle: false,
-          selected: false,
-          fixed: false
-        }
-      ]
+      allDice: [],
+      fixedDice: []
     };
   },
   getters: {
-    getPlayers: (state: GameVar, payload): Player => state.players[payload]
+    getPlayers: (state: GameVar, payload): Player => state.players[payload],
+    // getFixedDice: (state: GameVar) => state.allDice.map((obj) => obj.fixed === true)
+    getFixedDice: (state: GameVar) => state.allDice.map((obj) =>{
+        if(obj.fixed === true){
+            return obj
+        }
+            
+    }),
+    parentsTurn: (state:GameVar, payLoad:string) => state.players.forEach(player => {
+        if (player.name === payLoad && player.playing === true) {
+            return true
+        } else {
+            return false
+        }
+    })
   },
 
   actions: {},
@@ -230,35 +195,86 @@ export const store = createStore({
   mutations: {
     startNewGame: (state: GameVar): void => {
       state.gameStatus = "inProgress";
-      state.players.forEach(player => {
+      state.players[state.currentPlayerIndex].active = true
         // function get's its use when in the future more players can join and have to wait for eachother
-        player.active = true;
-      });
     },
     throwDice: (state: GameVar): void => {
       // every dice that is not fixed by a player should be rolled with a .3s interval. A watcher in the diceBoard component has to watch for dice value changes.
-      state.allDice.forEach((dice, index) => {
-        const value = Math.floor(Math.random() * 6) + 1;
-        console.log(value);
-        dice.value = value;
-      });
+      if(state.players[state.currentPlayerIndex].canThrowDice === true) {
+
+        for(let x = 0; x < 8 - state.fixedDice.length; x++){
+            const value =  Math.floor(Math.random() * 6) + 1;
+            const doodle = value === 6
+            const dice =           {
+                id: x.toString(),
+                value: value,
+                doodle: doodle,
+                selected: false,
+                fixed: false
+          }
+          state.allDice.push(dice);
+        }
+
+            state.players[state.currentPlayerIndex].canThrowDice = false;
+            state.players[state.currentPlayerIndex].canFixDice = true
+        } else {
+            console.log("you cant throw dice at this point")
+        }
+
     },
     selectDice: (state: GameVar, payload:number): void => {
-        console.log(payload)
         // make a map function
-        state.allDice.forEach(element => {
-            if (element.value === payload){
-                console.log(element.value)
-                element.selected = true
+        if(state.players[state.currentPlayerIndex].canFixDice === true) {
+
+            state.allDice.forEach(element => {
+                if (element.value === payload && element.fixed === false){
+                    element.selected = true
+                } else {
+                    element.selected = false
+                }
+            })
+        }
+    },
+    fixDice: (state: GameVar, payLoad:number): void => {
+        let checks = 0;
+
+        console.log(state.allDice)
+        // check if value is allowed to be fixed
+        state.fixedDice.forEach(element => {
+            element.selected = false
+            if (element.fixed === true && element.value === payLoad){
+                console.log("this value was allready selected, choose another dice")
+                checks++;
             }
         })
-        console.log(state.allDice)
-    },
-    deSelectDice: (state: GameVar):void => {
-        console.log("deselect dice")
+
+        // check if playing player is allowed to select
+        if(state.players[state.currentPlayerIndex].canFixDice === false){
+            console.log("you are not allowed to fix these dice at this point")
+            checks++
+        }
+
+        console.log(checks)
+        // then fix all dice with payLoad value
         state.allDice.forEach(element => {
-            element.selected = false
-        });
+            console.log("fix dice")
+            if(checks === 0) {
+
+                if (element.value === payLoad){
+                    element.selected = false;
+                    element.fixed = true;
+                    state.fixedDice.push(element)
+                }
+
+            }
+        })
+        state.players[state.currentPlayerIndex].canFixDice = false
+        state.players[state.currentPlayerIndex].canThrowDice = true
+        
+        state.allDice = [];
+
+        // if dice.length = 0...
+
     }  
 },
   modules: {}

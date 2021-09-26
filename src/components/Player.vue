@@ -1,10 +1,8 @@
-// this needs to be a generic component that can be used for a computerPlayer or user(s)
-
 <template>
     <div class="player-container">
-        <TileStack />
+        <TileStack :parent="parentCommand" />
         <p>{{ this.player }} </p>
-        <Button class="button" :parentCommand="parentCommand" />
+        <Button v-if="this.myTurn" class="button" :parentCommand="parentCommand" />
     </div>
 </template>
 
@@ -17,9 +15,11 @@ export default defineComponent({
     name: "Player",
     data() {
         return {
+            myTurn: this.$store.state.players[this.player].playing,
             parentCommand: {
                 function: "throw",
-                text: "throw"
+                text: "throw",
+                parentName: this.player
                 }
             }
         },
@@ -29,6 +29,19 @@ export default defineComponent({
     props: {
         player: String,  
     },
+        watch: {
+        players: {
+            handler: function(newValue, oldValue) {
+                console.log("hi")
+                if(newValue[this.player] === true) {
+                    this.myTurn = true
+                } else {
+                    this.myTurn = false;
+                }
+            },
+            deep: true
+        }
+    }
 
 });
 </script>
@@ -41,7 +54,7 @@ export default defineComponent({
         padding: 24px;
         border: 2px solid green;
         border-radius: 5px;
-        height: 30%;
+        height: 100%;
         background-color: lightseagreen;
 
         .button {

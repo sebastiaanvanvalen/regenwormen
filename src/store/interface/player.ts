@@ -5,6 +5,9 @@ export interface Player {
     id: string;
     name: string;
     playing: boolean;
+    canThrowDice: boolean;
+    canFixDice: boolean;
+    canPickTile: boolean;
     winStatus: boolean;
     tilePile: Tile[];
     diceStack: Dice[];
