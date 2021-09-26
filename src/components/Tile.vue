@@ -1,0 +1,75 @@
+// this needs to be a generic component
+
+
+<template>
+<div class="container">
+
+    <div v-if="tile.active === true" class="tile-container">
+        <p>{{tile.value}}</p>
+
+        <img v-if="this.tile.doodleValue === 1" src="@/assets/doodles/doodle1.png" :key="this.tile.id" alt="d1" />
+        <img v-else-if="this.tile.doodleValue === 2" src="@/assets/doodles/doodle2.png" :key="this.tile.id" alt="d2" />
+        <img v-else-if="this.tile.doodleValue === 3" src="@/assets/doodles/doodle3.png" :key="this.tile.id" alt="d3" />
+        <img v-else-if="this.tile.doodleValue === 4" src="@/assets/doodles/doodle4.png" :key="this.tile.id" alt="d4" />
+
+
+        <!-- is this (in another form) needed? -->
+        <h1 v-else>{{ tile.doodleValue }}</h1>
+        
+        </div>
+    <div v-else class="back"></div>
+</div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import { Tile } from '../store/interface/tile';
+
+export default defineComponent({
+    name: "Tile",
+    props: {
+        tile: Object as () => Tile,
+    },
+
+});
+</script>
+
+<style scoped lang="scss">
+.tile-container {
+    font-family: 'Permanent Marker', cursive;
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    height: 80px;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px;
+    margin: 0 4px;
+    border-radius: 5px;
+    background-color: rgb(241, 239, 232);
+
+    // border: 1px solid white;
+
+    p {
+        border-bottom: 4px solid black;
+    }
+
+
+        &:hover {
+            transform: scale(1.2);    
+        }
+
+}
+
+.back {
+    border-radius: 5px;
+    background-color: rgba(228, 228, 222, 0.918);
+    margin: 0 4px;
+    height: 80px;
+    width: 50px;
+}
+
+
+</style>

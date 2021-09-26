@@ -1,24 +1,59 @@
 <template>
+<div class="container">
+
     <div class="board-container">
-        // compHand 
+        <Player :player="'computer'"/>
+        <Tiles class="tiles" :tileMessage="tileMessage" />
+        <Player :player="'YOU'" />
+    </div>
+    <div class="dice-container">
+        <DiceBoard />
 
-        // tiles
-
-        // userHans
-        
-        <div>
+    </div>
+</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import Player from './Player.vue';
+import Tiles from './Tiles.vue';
+import DiceBoard from "./DiceBoard.vue";
 
 export default defineComponent({
     name: "Board",
+    components: {
+        Player, Tiles, DiceBoard
+    },
+    data() {
+        return {
+            tileMessage: "help I'm the TileStack",
+        }
+    }
 
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
+    .container {
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        padding: 16px;
+        width: 100%;
 
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between    ;
+            width:70%;
+        }
+
+        .dice-container {
+            background-color: green;
+            border-radius: 5px;
+            width: 100%;
+            width: 28%;
+        }
+    }
 </style>

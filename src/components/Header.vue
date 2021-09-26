@@ -2,8 +2,8 @@
     <header>
         <button @click="startNewGame()">{{ buttonMessage }}</button>
         <div class="score-container">
-            <div class="score compScore">opponents score: {{compScore}}</div>
             <div class="score userScore">your score: {{ userScore }}</div>
+            <div class="score compScore">opponents score: {{compScore}}</div>
         </div>
     </header>
 </template>
@@ -21,7 +21,7 @@ export default defineComponent({
     data() {
         return {
             buttonMessage: "",
-            userScore: 0,
+            userScore: 1,
             compScore: 0,
         }
     },
@@ -36,11 +36,11 @@ export default defineComponent({
         startNewGame() {
             this.$store.state.gameVars.commit('startNewgame')
         },
-        ...mapMutations("gameVars", ["startNewGame"]),
+        ...mapMutations(["startNewGame"]),
 
     },
     computed: {
-        ...mapState('gameVars', ['gameStatus'])
+        ...mapState(['gameStatus'])
     },
     mounted() {
         this.setButtonText(this.gameStatus)

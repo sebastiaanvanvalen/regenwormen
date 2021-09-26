@@ -1,7 +1,8 @@
 export interface Tile {
     id: string;
     value: number;
-    wormValue: number;
-    position: string;
+    doodleValue: number;
+    owner: string;
+    selected: boolean;
     active: boolean;
 }

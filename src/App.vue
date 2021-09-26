@@ -3,17 +3,19 @@
         <div class="nav" id="na">
             <Header />
         </div>
-        <router-view />
+        <Board />
     </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
+import Board from "@/components/Board.vue";
 
 export default {
     name: "app",
     components: {
-        Header
+        Header,
+        Board
     }
 };
 </script>
@@ -30,6 +32,8 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    height: 100vh;
+    max-height: calc(100vh - 60px);
 }
 
 #nav {
