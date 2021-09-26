@@ -1,5 +1,4 @@
 import { Tile } from './tile';
-import { Dice } from './dice';
 
 export interface Player {
     id: string;
@@ -10,7 +9,7 @@ export interface Player {
     canPickTile: boolean;
     winStatus: boolean;
     tilePile: Tile[];
-    diceStack: Dice[];
+    diceValue: number;
     score: number;
     active: boolean;
 }

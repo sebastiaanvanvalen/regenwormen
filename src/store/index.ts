@@ -20,7 +20,7 @@ export const store = createStore({
           canPickTile: false,
           winStatus: false,
           tilePile: [],
-          diceStack: [],
+          diceValue: 0,
           score: 0,
           active: true
         },
@@ -33,7 +33,7 @@ export const store = createStore({
           canPickTile: false,
           winStatus: false,
           tilePile: [],
-          diceStack: [],
+          diceValue: 0,
           score: 0,
           active: true
         }
@@ -261,17 +261,23 @@ export const store = createStore({
             if(checks === 0) {
 
                 if (element.value === payLoad){
+                    // add fixed value to diceValue
+                    if (element.value === 6) {
+                        state.players[state.currentPlayerIndex].diceValue + 5;
+                    } else {
+                        state.players[state.currentPlayerIndex].diceValue += element.value;
+                    }
                     element.selected = false;
                     element.fixed = true;
                     state.fixedDice.push(element)
                 }
 
+                state.players[state.currentPlayerIndex].canFixDice = false
+                state.players[state.currentPlayerIndex].canThrowDice = true
+                state.allDice = [];
             }
         })
-        state.players[state.currentPlayerIndex].canFixDice = false
-        state.players[state.currentPlayerIndex].canThrowDice = true
         
-        state.allDice = [];
 
         // if dice.length = 0...
 

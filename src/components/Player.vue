@@ -2,6 +2,7 @@
     <div class="player-container">
         <TileStack :parent="parentCommand" />
         <p>{{ this.player }} </p>
+        <p>DiceCount = {{ this.$store.state.players[this.player].diceValue }}</p>
         <Button v-if="this.myTurn" class="button" :parentCommand="parentCommand" />
     </div>
 </template>
@@ -15,6 +16,7 @@ export default defineComponent({
     name: "Player",
     data() {
         return {
+
             myTurn: this.$store.state.players[this.player].playing,
             parentCommand: {
                 function: "throw",
@@ -29,7 +31,10 @@ export default defineComponent({
     props: {
         player: String,  
     },
-        watch: {
+    computed: {
+        
+    },
+    watch: {
         players: {
             handler: function(newValue, oldValue) {
                 console.log("hi")
