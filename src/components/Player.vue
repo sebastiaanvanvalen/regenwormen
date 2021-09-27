@@ -1,7 +1,7 @@
 <template>
     <div class="cont player-container">
         <div class="cont tile-container">
-            <TileStack :parent="parentCommand" />
+            <TileStack :parent="this.player" />
         </div>
         <div class="cont info-container">
             <p>{{ this.player.name }}</p>
@@ -23,11 +23,7 @@ export default defineComponent({
     name: "Player",
     data() {
         return {
-            parentCommand: {
-                function: "throw",
-                text: "throw",
-                parentName: this.player.name
-            }
+
         };
     },
     components: {

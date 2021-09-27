@@ -30,31 +30,30 @@ export default defineComponent({
         tile: Object as () => Tile,
     },
     methods:{
-        ...mapMutations(['pickTile']),
+        ...mapMutations(['pickTile', 'loseRound']),
         pick(){
-            if (this.players[this.player.id].playing === false) {
+            console.log(this.tiles[this.tile.id].active)
+            if (this.players.map(player => player.playing).name === "comp") {
                 confirm('you are not playing at the moment.')
 
-            } else if (this.fixedDice.filter(tile => tile.doodle === true).length === 0) {
+            } else if (this.fixedDice.filter(tile => tile.doodle).length === 0) {
                 confirm('You need at least one doodle if you want to pick a tile')
             
-            } else if (this.tiles[this.tile.id].active === false) {
+            } else if (this.tiles[parseInt(this.tile.id)].active === false) {
                 confirm('this tile is not available for you to take')
             
-            } else if (this.tile.owner === this.players.map(player => player.playing === true).owner) {
+            } else if (this.tile.owner === this.players.map(player => player.playing).owner) {
                 confirm('you can not take your own tile')
             
-            } else if(this.players[this.player.id].canPickTile === false) {
+            } else if(!this.players[this.currentPlayerIndex].canPickTile) {
                 confirm('you can not pick a tile at this point')
             } else {
                 this.pickTile(this.tile)
-
             }
-
         },
     },
     computed:{
-    ...mapState(['players', 'fixedDice', 'allDice', 'tiles']),
+    ...mapState(['players', 'fixedDice', 'allDice', 'tiles', 'currentPlayerIndex']),
 
     },
 });

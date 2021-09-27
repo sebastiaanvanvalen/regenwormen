@@ -1,37 +1,28 @@
 <template>
     <div class="tile-stack-container">
         <p>tilestack</p>
-
+        <Tile v-for="tile in this.players[parseInt(this.parent.id) -1].tilePile || []" :key="tile.id" :tile="tile"/>
         
         </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters } from 'vuex';
+import Tile from './Tile.vue';
+import { mapState, mapGetters } from 'vuex';
 
 export default defineComponent({
     name: "TileStack",
+    components: {
+        Tile
+    },
     props: {
         parent: Object,
     },
     computed: {
         ...mapGetters(["getTileStack"]),
+        ...mapState(['players'])
     },
-    // watcher for function when tilestack changes?
-    watch: {
-        players: {
-            handler: function(newValue, oldValue) {
-                console.log("hi");
-                if (newValue[this.player.id] === true) {
-                    this.myTurn = true;
-                } else {
-                    this.myTurn = false;
-                }
-            },
-            deep: true
-        }
-    }
 });
 </script>
 

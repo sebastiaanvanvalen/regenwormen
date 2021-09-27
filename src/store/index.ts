@@ -239,7 +239,6 @@ export const store = createStore({
         fixDice: (state: GameVar, payLoad: number): void => {
             let checks = 0;
 
-            console.log(state.allDice);
             // check if value is allowed to be fixed
             state.fixedDice.forEach(element => {
                 element.selected = false;
@@ -255,10 +254,8 @@ export const store = createStore({
                 checks++;
             }
 
-            console.log(checks);
             // then fix all dice with payLoad value
             state.allDice.forEach(element => {
-                console.log("fix dice");
                 if (checks === 0) {
                     if (element.value === payLoad) {
                         // add fixed value to diceValue
@@ -277,24 +274,6 @@ export const store = createStore({
                     state.allDice = [];
                 }
             });
-
-            if (state.allDice.length === 0 &&
-                state.fixedDice.map(tile => tile.doodle === true).length === 0) {
-                    // no more dice left and no doodle = 
-                    // - other players turn!
-                    // - return last tile from players stack
-                    // if present, activate new top tile of players stack
-                    // --- then ---
-                    // set highest active tile in Tiles to 'inactive'
-                    // check if there are tiles left, else => game ended
-                    // switch turns
-                }
-
-
-            // if active table owned tilevalues contain diceValue => player.canPickTile = true && fixedDice contains minimal 1 Dice.worm = true
-
-            // if dice.length = 0 && fixedDice.contains(dice.worm === false) => turn highest tile
-            // if no active table owned tiles are left => game won by highest worm count
         },
         pickTile: (state: GameVar, payLoad: Tile): void => {
             // before adding a new top tile to the stack make all below inactive
@@ -317,7 +296,26 @@ export const store = createStore({
             state.players[state.currentPlayerIndex].canFixDice = false;
             state.players[state.currentPlayerIndex].canPickTile = false;
             state.players[state.currentPlayerIndex].canThrowDice = false;
-            console.log(state.tiles.map(tiles => tiles.active));
+
+        },
+        loseRound: (state: GameVar): void =>{
+            if(state.players[state.currentPlayerIndex].tilePile.length > 0){
+                const removedTile = state.players[state.currentPlayerIndex].tilePile.pop()
+                if (state.players[state.currentPlayerIndex].tilePile) {
+                    state.players[state.currentPlayerIndex].tilePile[-1].active = true
+                }
+                // place tile back in allTiles
+            }
+
+
+
+            state.players[state.currentPlayerIndex].canFixDice = false;
+            state.players[state.currentPlayerIndex].canThrowDice = true;
+            state.allDice = [];
+
+            // FIRST! return top tile from players stack
+                // then! turn higst tile on the table
+                // if there are tiles left => switch turn
         }
     },
     modules: {}
