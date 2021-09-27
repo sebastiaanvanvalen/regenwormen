@@ -1,9 +1,16 @@
 <template>
-    <div class="player-container">
-        <TileStack :parent="parentCommand" />
-        <p>{{ this.player }}</p>
-        <p>DiceCount = {{ this.$store.state.players[this.player].diceValue }}</p>
-        <Button v-if="this.myTurn" class="button" :parentCommand="parentCommand" />
+    <div class="cont player-container">
+        <div class="cont tile-container">
+            <TileStack :parent="parentCommand" />
+        </div>
+        <div class="cont info-container">
+            <p>{{ this.player.name }}</p>
+            <p>DiceCount = {{ this.player.diceValue }}</p>
+            <p>DoodleCount =</p>
+        </div>
+        <div class="cont button-container">
+            <Button class="button" :player="this.player" />
+        </div>
     </div>
 </template>
 
@@ -16,11 +23,10 @@ export default defineComponent({
     name: "Player",
     data() {
         return {
-            myTurn: this.$store.state.players[this.player].playing,
             parentCommand: {
                 function: "throw",
                 text: "throw",
-                parentName: this.player
+                parentName: this.player.name
             }
         };
     },
@@ -29,14 +35,14 @@ export default defineComponent({
         Button
     },
     props: {
-        player: String
+        player: Object 
     },
     computed: {},
     watch: {
         players: {
             handler: function(newValue, oldValue) {
                 console.log("hi");
-                if (newValue[this.player] === true) {
+                if (newValue[this.player.id] === true) {
                     this.myTurn = true;
                 } else {
                     this.myTurn = false;
@@ -58,6 +64,20 @@ export default defineComponent({
     border-radius: 5px;
     height: 100%;
     background-color: lightseagreen;
+
+    .cont {
+        // border: 1px solid blue;
+        width: 30%;
+    }
+
+    .info-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        font-family: "Permanent Marker", cursive;
+        font-size: 18px;
+        color: white;
+    }
 
     .button {
         align-self: center;

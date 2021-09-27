@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <div class="board-container">
-            <Player :player="'1'" />
+            <Player :player="this.$store.state.players[1]" />
             <Tiles class="tiles" :tileMessage="tileMessage" />
-            <Player :player="'0'" />
+            <Player :player="this.$store.state.players[0]" />
         </div>
         <div class="dice-container">
             <DiceBoard />

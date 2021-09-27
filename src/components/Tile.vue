@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { Tile } from '../store/interface/tile';
 
 export default defineComponent({
@@ -32,10 +32,31 @@ export default defineComponent({
     methods:{
         ...mapMutations(['pickTile']),
         pick(){
-            this.pickTile(this.tile)
+            if (this.players[this.player.id].playing === false) {
+                confirm('you are not playing at the moment.')
+
+            } else if (this.fixedDice.filter(tile => tile.doodle === true).length === 0) {
+                confirm('You need at least one doodle if you want to pick a tile')
+            
+            } else if (this.tiles[this.tile.id].active === false) {
+                confirm('this tile is not available for you to take')
+            
+            } else if (this.tile.owner === this.players.map(player => player.playing === true).owner) {
+                confirm('you can not take your own tile')
+            
+            } else if(this.players[this.player.id].canPickTile === false) {
+                confirm('you can not pick a tile at this point')
+            } else {
+                this.pickTile(this.tile)
+
+            }
+
         },
     },
+    computed:{
+    ...mapState(['players', 'fixedDice', 'allDice', 'tiles']),
 
+    },
 });
 </script>
 

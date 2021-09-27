@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 import { GameVar } from "./interface/gamevar";
 import { Player } from "./interface/player";
 import { Tile } from './interface/tile';
+import { Responseobject } from './interface/responseobject';
 
 export const store = createStore({
     state(): GameVar {
@@ -170,7 +171,8 @@ export const store = createStore({
                 }
             ],
             allDice: [],
-            fixedDice: []
+            fixedDice: [],
+
         };
     },
     getters: {
@@ -276,37 +278,46 @@ export const store = createStore({
                 }
             });
 
+            if (state.allDice.length === 0 &&
+                state.fixedDice.map(tile => tile.doodle === true).length === 0) {
+                    // no more dice left and no doodle = 
+                    // - other players turn!
+                    // - return last tile from players stack
+                    // if present, activate new top tile of players stack
+                    // --- then ---
+                    // set highest active tile in Tiles to 'inactive'
+                    // check if there are tiles left, else => game ended
+                    // switch turns
+                }
+
+
             // if active table owned tilevalues contain diceValue => player.canPickTile = true && fixedDice contains minimal 1 Dice.worm = true
 
             // if dice.length = 0 && fixedDice.contains(dice.worm === false) => turn highest tile
             // if no active table owned tiles are left => game won by highest worm count
         },
-        pickTile: (state: GameVar, payLoad:Tile ): void => {
+        pickTile: (state: GameVar, payLoad: Tile): void => {
+            // before adding a new top tile to the stack make all below inactive
+            state.players[state.currentPlayerIndex].tilePile.forEach(element => {
+                element.active = false;
+            });
 
-            if( state.players[state.currentPlayerIndex].diceValue === payLoad.value && 
-                state.players[state.currentPlayerIndex].canPickTile === true && 
-                state.fixedDice.filter(tile => tile.doodle === true).length > 0 &&
-                payLoad.owner !== state.players[state.currentPlayerIndex].name &&
-                payLoad.active === true ) {
+            const tileIndex = state.tiles
+                .map(function(tile) {
+                    return tile.value;
+                })
+                .indexOf(payLoad.value);
 
-                    // before adding a new top tile to the stack make all below inactive
-                    state.players[state.currentPlayerIndex].tilePile.forEach(element => {
-                        element.active = false;
-                    })
+            const selectedTile = state.tiles[tileIndex];
+            selectedTile.owner = state.players[state.currentPlayerIndex].name;
+            state.tiles.splice(tileIndex, 1);
+            state.players[state.currentPlayerIndex].tilePile.push(selectedTile);
 
-                    const tileIndex = state.tiles.map(function(tile) {
-                        return tile.value;
-                    }).indexOf(payLoad.value)
-
-                const selectedTile = state.tiles[tileIndex]
-                selectedTile.owner = state.players[state.currentPlayerIndex].name
-                state.tiles.splice(tileIndex, 1)
-                state.players[state.currentPlayerIndex].tilePile.push(selectedTile)
-            }
-
-            // change player
-            // start computer alg
-            // reset players settings
+            state.players[state.currentPlayerIndex].playing = false;
+            state.players[state.currentPlayerIndex].canFixDice = false;
+            state.players[state.currentPlayerIndex].canPickTile = false;
+            state.players[state.currentPlayerIndex].canThrowDice = false;
+            console.log(state.tiles.map(tiles => tiles.active));
         }
     },
     modules: {}
