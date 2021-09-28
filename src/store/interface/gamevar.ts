@@ -11,5 +11,5 @@ export interface GameVar {
     tiles: Tile[];
     allDice: Dice[];
     fixedDice: Dice[];
-    messages: Message;
+    message: Message;
 }

@@ -3,4 +3,5 @@ export interface Message {
     receiver: string;
     message: string;
     timer: number | "none";
+    active: boolean;
 }

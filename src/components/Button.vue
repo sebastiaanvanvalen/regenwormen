@@ -12,6 +12,7 @@
 import { defineComponent } from "vue";
 import { mapState, mapMutations } from "vuex";
 import { Player } from "../store/interface/player";
+import MessageClass from "./classes/MessageClass";
 
 export default defineComponent({
     name: "Dice",
@@ -19,17 +20,43 @@ export default defineComponent({
         player: Object as () => Player,
     },
     methods: {
-        ...mapMutations(["throwDice", "loseRound"]),
-
+        ...mapMutations(["throwDice", "loseRound", "adjustMessage", "resetMessage", "endGame"]),
         pushButton() {
+            let opponentIndex;
+            
+            if(this.currentPlayerIndex === 0){
+                opponentIndex = 1
+            } else {
+                opponentIndex = 0;
+            }
             // before throwing dice
+            this.resetMessage();
+
             if (this.player.playing === false) {
-                confirm("it is not your turn to throw dice yet");
+                let message = 'it is not your turn to throw dice yet';
+                let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
+                this.adjustMessage(messageClass.getMessage());
+                this.loseRound();
             } else {
                 this.throwDice();
             }
 
             this.checkDice();
+
+            // do we have a winner?
+            if( this.tiles.filter(tile => tile.active).length === 0) {
+                this.players.forEach(element =>{
+                    element.playing = false
+                })
+                this.endGame()
+                if(this.players[this.currentPlayerIndex].doodleScore < this.players[opponentIndex].doodleScore) {
+                    console.log(this.players[opponentIndex].name + " wins");
+                } else if (this.players[this.currentPlayerIndex].doodleScore === this.players[opponentIndex].doodleScore){
+                    console.log("it's a tie!");
+                }else {
+                    console.log(this.players[this.currentPlayerIndex].name + " wins");
+                }
+            }
         },
         checkDice() {
             // after dice are thrown
@@ -42,18 +69,15 @@ export default defineComponent({
                     )
             ) {
                 // unable to fix dice because of conflicting values
-                setTimeout(() => {
-                    confirm(
-                        "you threw values that you allready have... better luck next time"
-                    );
+                let message = 'unfortinately you threw all dice without collecting a doodle. Good luck next time.';
+                let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
+                this.adjustMessage(messageClass.getMessage());
                     this.loseRound();
-                }, 500);
             }
         }
     },
     computed: {
-        ...mapState(["players", "fixedDice", "allDice", "tiles"]),
-
+        ...mapState(["players", "currentPlayerIndex", "fixedDice", "allDice", "tiles"]),
         styleButton() {
             let style;
             switch (this.player.playing) {
@@ -81,7 +105,6 @@ export default defineComponent({
                     console.log("no button styling could be initiated");
                     break;
             }
-            
             return style;
         }
     }

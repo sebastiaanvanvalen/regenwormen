@@ -1,6 +1,6 @@
 <template>
     <header>
-        <button @click="startNewGame()">{{ buttonMessage }}</button>
+        <button @click="this.newGame()">New Game</button>
         <div class="score-container">
             <div class="score userScore">your score: {{ this.$store.state.players[0].doodleScore || 0 }}</div>
             <div class="score compScore">opponents score: {{this.$store.state.players[1].doodleScore || 0}}</div>
@@ -16,34 +16,19 @@ export default defineComponent({
     name: "Header",
     data() {
         return {
-            buttonMessage: "",
             userScore: 1,
             compScore: 0,
         }
     },
     methods: {
-        ...mapMutations(["startNewGame"]),
-        setButtonText(status) {
-            if (status === "empty") {
-                this.buttonMessage = "new Game"
-            } else {
-                this.buttonMessage = "restart"
-            }
-        },
-        startNewGame() {
-            this.$store.state.gameVars.commit('startNewgame')
-        },
+        ...mapMutations(["newGame"]),
     },
     computed: {
-        ...mapState(['gameStatus'])
-    },
-    mounted() {
-        this.setButtonText(this.gameStatus)
+        ...mapState(['gameStatus']),
     },
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     header {
         display: flex;

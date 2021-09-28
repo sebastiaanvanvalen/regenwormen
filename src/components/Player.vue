@@ -18,54 +18,54 @@
 import { defineComponent } from "vue";
 import TileStack from "./TileStack.vue";
 import Button from "./Button.vue";
+import { Player } from "../store/interface/player";
 
 export default defineComponent({
     name: "Player",
     components: {
         TileStack,
-        Button
+        Button,
     },
     props: {
-        player: Object 
+        player: Object as () => Player,
     },
-    computed: {},
 });
 </script>
 
 <style scoped lang="scss">
-.player-container {
-    max-width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 24px;
-    border: 2px solid green;
-    border-radius: 5px;
-    height: 100%;
-    background-color: lightseagreen;
-
-    .cont {
-        width: 30%;
-    }
-
-    .info-container {
+    .player-container {
+        max-width: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        font-family: "Permanent Marker", cursive;
-        font-size: 18px;
-        color: white;
-    }
-
-    .button-container {
-        flex-direction: column;
         justify-content: space-between;
-        font-family: "Permanent Marker", cursive;
-        font-size: 18px;
-        color: white;
-    }
+        padding: 12px;
+        border: 2px solid green;
+        border-radius: 5px;
+        height: 100%;
+        background-color: lightseagreen;
 
-    .button {
-        align-self: center;
+        .cont {
+            width: 30%;
+        }
+
+        .info-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            font-family: "Permanent Marker", cursive;
+            font-size: 18px;
+            color: white;
+        }
+
+        .button-container {
+            flex-direction: column;
+            justify-content: space-between;
+            font-family: "Permanent Marker", cursive;
+            font-size: 18px;
+            color: white;
+        }
+
+        .button {
+            align-self: center;
+        }
     }
-}
 </style>

@@ -3,9 +3,15 @@ so we are making this game in the first place for a friend. Or actually me. Beca
 At this point I need to search for bugs and optimalisations. So what came up:
 
 errors:
-- no player has won / it's a tie solution is made
 
+- many styling errors
 
 
 optimalisations:
 - cross browser checks
+- make some choices for functionality. In the component or in the parent.
+- a milion cases:
+    if a player has a dice value higher then all tiles on the table but the oponent's top tile is higher then the players dice value But then again there are no dice combinations left to get to this value... This is not yet included
+- many unique rare situations to be checked for
+- message system needs to be re-checked. Can multiple messages occur? Is a timer needed?
+- make a win system

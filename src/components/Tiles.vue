@@ -14,14 +14,12 @@ export default defineComponent({
     components: {
         Tile,
     },
-    props: ["tileMessage"],
     computed: {
         ...mapState(["tiles"])
     }
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .tiles-container {
         display: flex;
@@ -35,5 +33,4 @@ export default defineComponent({
         height: 200px;
         max-width: 100%;
     }
-
 </style>

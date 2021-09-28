@@ -107,40 +107,39 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.dice-cont {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-    border: 2px solid black;
-    position: relative;
-    background-color: whitesmoke;
-    margin: 5px;
+    .dice-cont {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+        border: 2px solid black;
+        position: relative;
+        background-color: whitesmoke;
+        margin: 5px;
 
-    .dice {
-        background-color: black;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        position: absolute;z
+        .dice {
+            background-color: black;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;z
 
-        &:before {
-            background-color: yellow;
+            &:before {
+                background-color: yellow;
+            }
         }
-    }
 
-    .doodle {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        img {
+        .doodle {
+            position: absolute;
             height: 100%;
-            width: 100%;    
+            width: 100%;
+            img {
+                height: 100%;
+                width: 100%;    
+            }
+        }
+        &:hover {
+            transform: scale(1.2);
         }
     }
-    &:hover {
-        transform: scale(1.2);
-    }
-}
-
 </style>

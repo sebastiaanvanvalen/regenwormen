@@ -9,14 +9,15 @@
 import { defineComponent } from "vue";
 import Tile from './Tile.vue';
 import { mapState, mapGetters } from 'vuex';
+import { Player } from "../store/interface/player";
 
 export default defineComponent({
     name: "TileStack",
     components: {
-        Tile
+        Tile,
     },
     props: {
-        parent: Object,
+        parent: Object as () => Player,
     },
     computed: {
         ...mapGetters(["getTileStack"]),
