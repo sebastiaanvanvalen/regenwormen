@@ -2,8 +2,7 @@ import { createStore } from "vuex";
 
 import { GameVar } from "./interface/gamevar";
 import { Player } from "./interface/player";
-import { Tile } from './interface/tile';
-import { Responseobject } from './interface/responseobject';
+import { Tile } from "./interface/tile";
 
 export const store = createStore({
     state(): GameVar {
@@ -23,7 +22,7 @@ export const store = createStore({
                     winStatus: false,
                     tilePile: [],
                     diceValue: 0,
-                    score: 0,
+                    doodleScore: 0,
                     active: true
                 },
                 {
@@ -36,7 +35,7 @@ export const store = createStore({
                     winStatus: false,
                     tilePile: [],
                     diceValue: 0,
-                    score: 0,
+                    doodleScore: 0,
                     active: true
                 }
             ],
@@ -172,7 +171,12 @@ export const store = createStore({
             ],
             allDice: [],
             fixedDice: [],
-
+            messages: {
+                type: "none",
+                receiver: "none",
+                message: "none",
+                timer: "none",
+            }
         };
     },
     getters: {
@@ -277,45 +281,123 @@ export const store = createStore({
         },
         pickTile: (state: GameVar, payLoad: Tile): void => {
             // before adding a new top tile to the stack make all below inactive
+
             state.players[state.currentPlayerIndex].tilePile.forEach(element => {
                 element.active = false;
             });
 
-            const tileIndex = state.tiles
-                .map(function(tile) {
-                    return tile.value;
-                })
-                .indexOf(payLoad.value);
+            // picking a tile from the other player:
+            if (
+                payLoad.owner !== "table" &&
+                payLoad.owner !== state.players[state.currentPlayerIndex].name
+            ) {
+                // take tile from opponent
+                console.log("taking tile from opponent")
+                payLoad.owner = state.players[state.currentPlayerIndex].name;
+                state.players[state.currentPlayerIndex].tilePile.push(payLoad);
 
-            const selectedTile = state.tiles[tileIndex];
-            selectedTile.owner = state.players[state.currentPlayerIndex].name;
-            state.tiles.splice(tileIndex, 1);
-            state.players[state.currentPlayerIndex].tilePile.push(selectedTile);
+                let opponentsIndex;
+                if (state.currentPlayerIndex === 1) {
+                    opponentsIndex = 0;
+                } else {
+                    opponentsIndex = 1;
+                }
+
+                state.players[state.currentPlayerIndex].doodleScore += payLoad.doodleValue;
+                state.players[opponentsIndex].doodleScore -= payLoad.doodleValue;
+
+                // remove top tile
+                state.players[opponentsIndex].tilePile.pop();
+
+                // if opponents tile has remaining tiles => activate top tile
+                if(state.players[opponentsIndex].tilePile.length > 0){
+                    state.players[opponentsIndex].tilePile[state.players[opponentsIndex].tilePile.length -1].active = true;
+                }
+            } else {
+
+                // pick tile from table
+                const tileIndex = state.tiles.map(tile => tile.value).indexOf(payLoad.value);
+                const selectedTile = state.tiles[tileIndex];
+
+                selectedTile.owner = state.players[state.currentPlayerIndex].name;
+                state.tiles.splice(tileIndex, 1);
+                state.players[state.currentPlayerIndex].tilePile.push(selectedTile);
+                state.players[state.currentPlayerIndex].doodleScore += payLoad.doodleValue;
+            }
 
             state.players[state.currentPlayerIndex].playing = false;
             state.players[state.currentPlayerIndex].canFixDice = false;
             state.players[state.currentPlayerIndex].canPickTile = false;
             state.players[state.currentPlayerIndex].canThrowDice = false;
+            state.players[state.currentPlayerIndex].diceValue = 0;
 
+            state.fixedDice = [];
+
+            if (state.currentPlayerIndex === 1) {
+                state.currentPlayerIndex = 0;
+            } else {
+                state.currentPlayerIndex = 1;
+            }
+            state.players[state.currentPlayerIndex].playing = true;
+            state.players[state.currentPlayerIndex].canThrowDice = true;
+            state.players[state.currentPlayerIndex].canPickTile = true;
         },
-        loseRound: (state: GameVar): void =>{
-            if(state.players[state.currentPlayerIndex].tilePile.length > 0){
-                const removedTile = state.players[state.currentPlayerIndex].tilePile.pop()
-                if (state.players[state.currentPlayerIndex].tilePile) {
-                    state.players[state.currentPlayerIndex].tilePile[-1].active = true
+        loseRound: (state: GameVar): void => {
+
+            // FIRST! return top tile from players stack
+
+            if (state.players[state.currentPlayerIndex].tilePile.length > 0) {
+                const removedTile = state.players[state.currentPlayerIndex].tilePile.pop();
+                state.players[state.currentPlayerIndex].doodleScore -= removedTile.doodleValue;
+
+                if (state.players[state.currentPlayerIndex].tilePile.length > 0) {
+                    state.players[state.currentPlayerIndex].tilePile[state.players[state.currentPlayerIndex].tilePile.length - 1].active = true;
                 }
+
+                const tileValues = state.tiles.map(tile => tile.value);
+                const index = (array, value) => {
+                    let low = 0;
+                    let high = array.length;
+                    while (low < high) {
+                        const mid = (low + high) >>> 1;
+                        if (array[mid] < value.value) {
+                            low = mid + 1;
+                        } else {
+                            high = mid;
+                        }
+                    }
+                    return low;
+                };
+                state.tiles.splice(index(tileValues, removedTile), 0, removedTile);
+
                 // place tile back in allTiles
             }
 
+            // then! turn highest tile on the table
+            const activeTiles = state.tiles.filter(tile => tile.active)
+            console.log(activeTiles)
+            state.tiles[activeTiles.length - 1].active = false
 
 
+            state.players[state.currentPlayerIndex].playing = false;
             state.players[state.currentPlayerIndex].canFixDice = false;
-            state.players[state.currentPlayerIndex].canThrowDice = true;
+            state.players[state.currentPlayerIndex].canPickTile = false;
+            state.players[state.currentPlayerIndex].canThrowDice = false;
+            state.players[state.currentPlayerIndex].diceValue = 0;
+
+            state.fixedDice = [];
             state.allDice = [];
 
-            // FIRST! return top tile from players stack
-                // then! turn higst tile on the table
-                // if there are tiles left => switch turn
+            if (state.currentPlayerIndex === 1) {
+                state.currentPlayerIndex = 0;
+            } else {
+                state.currentPlayerIndex = 1;
+            }
+            state.players[state.currentPlayerIndex].playing = true;
+            state.players[state.currentPlayerIndex].canThrowDice = true;
+            state.players[state.currentPlayerIndex].canPickTile = true;
+            
+
         }
     },
     modules: {}

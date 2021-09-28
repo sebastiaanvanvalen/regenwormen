@@ -1,0 +1,11 @@
+so we are making this game in the first place for a friend. Or actually me. Because it turned out this is THE game where I can finaly beat him by rockhard old fashion luck.
+
+At this point I need to search for bugs and optimalisations. So what came up:
+
+errors:
+- no player has won / it's a tie solution is made
+
+
+
+optimalisations:
+- cross browser checks

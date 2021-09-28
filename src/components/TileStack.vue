@@ -1,9 +1,8 @@
 <template>
-    <div class="tile-stack-container">
-        <p>tilestack</p>
-        <Tile v-for="tile in this.players[parseInt(this.parent.id) -1].tilePile || []" :key="tile.id" :tile="tile"/>
-        
+    <div class="tile-stack-container">{{this.parent.name}}'s tile stack :<div >
+        <Tile class="tiles" :style="{left: index * 20 + 'px'}" v-for="(tile, index) in this.players[parseInt(this.parent.id) -1].tilePile || []" :key="tile.id" :tile="tile"/>
         </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -21,12 +20,19 @@ export default defineComponent({
     },
     computed: {
         ...mapGetters(["getTileStack"]),
-        ...mapState(['players'])
+        ...mapState(['players', 'tiles'])
     },
 });
 </script>
 
 <style scoped lang="scss">
+.tile-stack-container {
+    position: relative;
+    font-family: "Permanent Marker", cursive;
+    color: white;
 
-
+    .tiles {
+        position: absolute;
+    }
+}
 </style>

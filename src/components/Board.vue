@@ -2,6 +2,7 @@
     <div class="container">
         <div class="board-container">
             <Player :player="this.$store.state.players[1]" />
+            <Messages />
             <Tiles class="tiles" :tileMessage="tileMessage" />
             <Player :player="this.$store.state.players[0]" />
         </div>
@@ -14,6 +15,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Player from "./Player.vue";
+import Messages from "./Messages.vue";
 import Tiles from "./Tiles.vue";
 import DiceBoard from "./DiceBoard.vue";
 
@@ -22,11 +24,12 @@ export default defineComponent({
     components: {
         Player,
         Tiles,
-        DiceBoard
+        DiceBoard,
+        Messages,
     },
     data() {
         return {
-            tileMessage: "help I'm the TileStack"
+            tileMessage: "help I'm the TileStack",
         };
     }
 });

@@ -10,6 +10,6 @@ export interface Player {
     winStatus: boolean;
     tilePile: Tile[];
     diceValue: number;
-    score: number;
+    doodleScore: number;
     active: boolean;
 }

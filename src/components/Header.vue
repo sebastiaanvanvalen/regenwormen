@@ -2,19 +2,15 @@
     <header>
         <button @click="startNewGame()">{{ buttonMessage }}</button>
         <div class="score-container">
-            <div class="score userScore">your score: {{ userScore }}</div>
-            <div class="score compScore">opponents score: {{compScore}}</div>
+            <div class="score userScore">your score: {{ this.$store.state.players[0].doodleScore || 0 }}</div>
+            <div class="score compScore">opponents score: {{this.$store.state.players[1].doodleScore || 0}}</div>
         </div>
     </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
 import { mapState, mapMutations } from "vuex";
-
-
-
 
 export default defineComponent({
     name: "Header",
@@ -26,6 +22,7 @@ export default defineComponent({
         }
     },
     methods: {
+        ...mapMutations(["startNewGame"]),
         setButtonText(status) {
             if (status === "empty") {
                 this.buttonMessage = "new Game"
@@ -36,8 +33,6 @@ export default defineComponent({
         startNewGame() {
             this.$store.state.gameVars.commit('startNewgame')
         },
-        ...mapMutations(["startNewGame"]),
-
     },
     computed: {
         ...mapState(['gameStatus'])
@@ -45,17 +40,6 @@ export default defineComponent({
     mounted() {
         this.setButtonText(this.gameStatus)
     },
-    watch: {
-        gameStatus: {
-            handler: function(newValue, oldValue) {
-                if (newValue === null) {
-                    this.visible = true;
-                } else {
-                    this.setButtonText(newValue)
-                }
-            },
-        }
-    }
 });
 </script>
 

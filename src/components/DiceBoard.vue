@@ -11,7 +11,7 @@
             />
         </div>
         <div class="fixed-area">
-            <Dice v-for="(dice, index) in this.myFixedDice" :key="index" :dice="dice" />
+            <Dice v-for="(dice, index) in this.fixedDice" :key="index" :dice="dice" />
         </div>
     </div>
 </template>
@@ -26,11 +26,6 @@ export default defineComponent({
     components: {
         Dice
     },
-    data() {
-        return {
-            myFixedDice: []
-        };
-    },
     methods: {
         ...mapMutations(["selectDice", "fixDice"]),
 
@@ -40,39 +35,42 @@ export default defineComponent({
 
         fixValues(value) {
             this.fixDice(value);
-            if (
-                this.fixedDice.length > 0 &&
-                this.fixedDice.filter(tile => tile.doodle === true).length ===
-                    0 &&
-                this.fixedDice.length === 8
-            ) {
+            let opponentIndex
+            if(this.currentPlayerIndex === 0){
+                opponentIndex = 1;
+            } else {
+                opponentIndex = 2;
+            }
+            if (this.fixedDice.length > 0 &&
+                this.fixedDice.filter(tile => tile.doodle === true).length === 0 &&
+                this.fixedDice.length === 8 ) {
                 // all out of dice and no doodle
                 setTimeout(() => {
-                    confirm(
-                        "unfortinately you threw all dice without collecting a doodle. Good luck next time."
-                    );
+                    confirm("unfortinately you threw all dice without collecting a doodle. Good luck next time.");
                     this.loseRound();
                 }, 500);
-            }
-        },
+            } 
+            
+            if ( this.fixedDice.length === 8 && 
+                // player has doodle
+                this.fixedDice.filter(tile => tile.doodle === true).length > 0 &&
+                // dice value doenst match any active tiles on the table
+                !this.tiles.map(tile => tile.active ? tile.value : 0).contains(this.players[this.currentPlayerIndex].diceValue) &&
+                // dice value does not match opponents top tile
+                this.players[opponentIndex].tilePile[this.players[opponentIndex].tilePile.length - 1].value !== this.players[this.currentPlayerIndex].diceValue) {
+                setTimeout(() => {
+                    confirm('yes, you have a doodle but you are out of dice. And their value does not match a tile. It is your opponents turn');
+                    this.loseRound();
+                }, 500);
+            } 
 
-        collectFixedDice() {
-            // console.log("we need to collect dice")
-        }
+            // wincheck in component
+        },
     },
     computed: {
-        ...mapState(["allDice", "fixedDice"]),
-
-        ...mapGetters(["getFixedDice"])
+        ...mapState(["allDice", "fixedDice", "currentPlayerIndex", "players", "tiles"]),
+        ...mapGetters(["getFixedDice"]),
     },
-    watch: {
-        fixedDice: {
-            handler: function(newValue, oldValue) {
-                this.myFixedDice = newValue;
-            },
-            deep: true
-        }
-    }
 });
 </script>
 

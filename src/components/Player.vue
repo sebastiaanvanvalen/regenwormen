@@ -3,13 +3,13 @@
         <div class="cont tile-container">
             <TileStack :parent="this.player" />
         </div>
-        <div class="cont info-container">
-            <p>{{ this.player.name }}</p>
-            <p>DiceCount = {{ this.player.diceValue }}</p>
-            <p>DoodleCount =</p>
-        </div>
+
+        <div class="cont info-container"></div>
+        
         <div class="cont button-container">
+            <p>{{ this.player.name }}</p>
             <Button class="button" :player="this.player" />
+            <p v-if="this.player.playing">value = {{ this.player.diceValue }}</p>
         </div>
     </div>
 </template>
@@ -21,11 +21,6 @@ import Button from "./Button.vue";
 
 export default defineComponent({
     name: "Player",
-    data() {
-        return {
-
-        };
-    },
     components: {
         TileStack,
         Button
@@ -34,19 +29,6 @@ export default defineComponent({
         player: Object 
     },
     computed: {},
-    watch: {
-        players: {
-            handler: function(newValue, oldValue) {
-                console.log("hi");
-                if (newValue[this.player.id] === true) {
-                    this.myTurn = true;
-                } else {
-                    this.myTurn = false;
-                }
-            },
-            deep: true
-        }
-    }
 });
 </script>
 
@@ -62,7 +44,6 @@ export default defineComponent({
     background-color: lightseagreen;
 
     .cont {
-        // border: 1px solid blue;
         width: 30%;
     }
 
@@ -70,6 +51,14 @@ export default defineComponent({
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+        font-family: "Permanent Marker", cursive;
+        font-size: 18px;
+        color: white;
+    }
+
+    .button-container {
+        flex-direction: column;
+        justify-content: space-between;
         font-family: "Permanent Marker", cursive;
         font-size: 18px;
         color: white;

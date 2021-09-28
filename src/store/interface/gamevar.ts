@@ -1,7 +1,7 @@
 import { Player } from './player';
 import { Tile } from './tile';
 import { Dice } from './dice';
-
+import { Message } from './message';
 export interface GameVar {
     gameStatus: "empty" | "ready" | "inProgress" | "finished";
     difficulty: "simple" | "hard";
@@ -11,4 +11,5 @@ export interface GameVar {
     tiles: Tile[];
     allDice: Dice[];
     fixedDice: Dice[];
+    messages: Message;
 }

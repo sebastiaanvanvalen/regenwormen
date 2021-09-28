@@ -2,20 +2,26 @@
 
 <template>
 <div class="container" @click="this.pick(this.tile)">
+    <div v-if="tile.active === false && tile.owner === 'table'" class="back"></div>
 
-    <div v-if="tile.active === true" class="tile-container">
+    <div v-else-if="tile.active === true && tile.owner === 'table'" class="tile table-tile">
         <p>{{tile.value}}</p>
 
         <img v-if="this.tile.doodleValue === 1" src="@/assets/doodles/doodle1.png" :key="this.tile.id" alt="d1" />
         <img v-else-if="this.tile.doodleValue === 2" src="@/assets/doodles/doodle2.png" :key="this.tile.id" alt="d2" />
         <img v-else-if="this.tile.doodleValue === 3" src="@/assets/doodles/doodle3.png" :key="this.tile.id" alt="d3" />
-        <img v-else-if="this.tile.doodleValue === 4" src="@/assets/doodles/doodle4.png" :key="this.tile.id" alt="d4" />
-
-        <!-- is this (in another form) needed? -->
-        <h1 v-else>{{ tile.doodleValue }}</h1>
+        <img v-else src="@/assets/doodles/doodle4.png" :key="this.tile.id" alt="d4" />
         
-        </div>
-    <div v-else class="back"></div>
+    </div>
+    <div v-else class="tile player-tile">
+        <p>{{tile.value}}</p>
+
+        <img v-if="this.tile.doodleValue === 1" src="@/assets/doodles/doodle1.png" :key="this.tile.id" alt="d1" />
+        <img v-else-if="this.tile.doodleValue === 2" src="@/assets/doodles/doodle2.png" :key="this.tile.id" alt="d2" />
+        <img v-else-if="this.tile.doodleValue === 3" src="@/assets/doodles/doodle3.png" :key="this.tile.id" alt="d3" />
+        <img v-else src="@/assets/doodles/doodle4.png" :key="this.tile.id" alt="d4" />
+
+    </div>
 </div>
 </template>
 
@@ -32,7 +38,7 @@ export default defineComponent({
     methods:{
         ...mapMutations(['pickTile', 'loseRound']),
         pick(){
-            console.log(this.tiles[this.tile.id].active)
+
             if (this.players.map(player => player.playing).name === "comp") {
                 confirm('you are not playing at the moment.')
 
@@ -47,53 +53,68 @@ export default defineComponent({
             
             } else if(!this.players[this.currentPlayerIndex].canPickTile) {
                 confirm('you can not pick a tile at this point')
+
+            } else if(this.players[this.currentPlayerIndex].diceValue !== this.tile.value) {
+                confirm('this tile has not the same value as your dice...');
+
             } else {
                 this.pickTile(this.tile)
             }
+
+            // wincheck in component
         },
     },
     computed:{
     ...mapState(['players', 'fixedDice', 'allDice', 'tiles', 'currentPlayerIndex']),
-
     },
 });
 </script>
 
 <style scoped lang="scss">
+    .tile {
+        font-family: 'Permanent Marker', cursive;
+        font-weight: bold;
+        font-size: 18px;
+        color: black;
+        height: 80px;
+        width: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 4px;
+        margin: 4px;
+        border-left: 2px solid green;
+        border-top: 2px solid green;
+        border-radius: 5px;
+        background-color: rgb(241, 239, 232);
 
-.tile-container {
-    font-family: 'Permanent Marker', cursive;
-    font-weight: bold;
-    font-size: 18px;
-    color: black;
-    height: 80px;
-    width: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 4px;
-    margin: 4px;
-    border-radius: 5px;
-    background-color: rgb(241, 239, 232);
+        p {
+            border-bottom: 4px solid black;
+        }
 
-    p {
-        border-bottom: 4px solid black;
+        &:hover {
+
+            transform: scale(1.4);
+                    z-index: 100;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 2px 1px white;  
+        }
     }
 
-    &:hover {
-        transform: scale(1.4);
-        border: 1px solid #ccc;
-        box-shadow: 0 0 2px 1px white;  
+    .player-tile {
+        position: absolute;
+
+        &:hover {
+            transform: scale(1.2);
+            top: -20px;
+        }
     }
-}
 
-.back {
-    border-radius: 5px;
-    background-color: rgba(228, 228, 222, 0.918);
-    margin: 0 4px;
-    height: 80px;
-    width: 50px;
-}
-
-
+    .back {
+        border-radius: 5px;
+        background-color: rgba(228, 228, 222, 0.918);
+        margin: 4px;
+        height: 80px;
+        width: 50px;
+    }
 </style>
