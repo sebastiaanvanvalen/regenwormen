@@ -348,6 +348,7 @@ export const store = createStore({
 
             if (state.players[state.currentPlayerIndex].tilePile.length > 0) {
                 const removedTile = state.players[state.currentPlayerIndex].tilePile.pop();
+                removedTile.owner = "table";
                 state.players[state.currentPlayerIndex].doodleScore -= removedTile.doodleValue;
 
                 if (state.players[state.currentPlayerIndex].tilePile.length > 0) {
@@ -370,6 +371,7 @@ export const store = createStore({
                 };
                 state.tiles.splice(index(tileValues, removedTile), 0, removedTile);
 
+                console.log(state.tiles)
                 // place tile back in allTiles
             }
 
