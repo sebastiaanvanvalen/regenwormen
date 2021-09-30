@@ -18,7 +18,6 @@ export const store = createStore({
                     playing: true,
                     canThrowDice: true,
                     canFixDice: true,
-                    canPickTile: true,
                     winStatus: false,
                     tilePile: [],
                     diceValue: 0,
@@ -31,7 +30,6 @@ export const store = createStore({
                     playing: false,
                     canThrowDice: false,
                     canFixDice: false,
-                    canPickTile: false,
                     winStatus: false,
                     tilePile: [],
                     diceValue: 0,
@@ -213,7 +211,6 @@ export const store = createStore({
                     playing: true,
                     canThrowDice: true,
                     canFixDice: true,
-                    canPickTile: true,
                     winStatus: false,
                     tilePile: [],
                     diceValue: 0,
@@ -226,7 +223,6 @@ export const store = createStore({
                     playing: false,
                     canThrowDice: false,
                     canFixDice: false,
-                    canPickTile: false,
                     winStatus: false,
                     tilePile: [],
                     diceValue: 0,
@@ -376,26 +372,21 @@ export const store = createStore({
 
         },
         throwDice: (state: GameVar): void => {
-            // every dice that is not fixed by a player should be rolled with a .3s interval. A watcher in the diceBoard component has to watch for dice value changes.
-            if (state.players[state.currentPlayerIndex].canThrowDice === true) {
-                for (let x = 0; x < 8 - state.fixedDice.length; x++) {
-                    const value = Math.floor(Math.random() * 6) + 1;
-                    const doodle = value === 6;
-                    const dice = {
-                        id: x.toString(),
-                        value: value,
-                        doodle: doodle,
-                        selected: false,
-                        fixed: false
-                    };
-                    state.allDice.push(dice);
-                }
-
-                state.players[state.currentPlayerIndex].canThrowDice = false;
-                state.players[state.currentPlayerIndex].canFixDice = true;
-            } else {
-                console.log("you cant throw dice at this point");
+            for (let x = 0; x < 8 - state.fixedDice.length; x++) {
+                const value = Math.floor(Math.random() * 6) + 1;
+                const doodle = value === 6;
+                const dice = {
+                    id: x.toString(),
+                    value: value,
+                    doodle: doodle,
+                    selected: false,
+                    fixed: false
+                };
+                state.allDice.push(dice);
             }
+
+            state.players[state.currentPlayerIndex].canThrowDice = false;
+            state.players[state.currentPlayerIndex].canFixDice = true;
         },
         selectDice: (state: GameVar, payload: number): void => {
             // make a map function
@@ -495,7 +486,6 @@ export const store = createStore({
 
             state.players[state.currentPlayerIndex].playing = false;
             state.players[state.currentPlayerIndex].canFixDice = false;
-            state.players[state.currentPlayerIndex].canPickTile = false;
             state.players[state.currentPlayerIndex].canThrowDice = false;
             state.players[state.currentPlayerIndex].diceValue = 0;
 
@@ -508,7 +498,6 @@ export const store = createStore({
             }
             state.players[state.currentPlayerIndex].playing = true;
             state.players[state.currentPlayerIndex].canThrowDice = true;
-            state.players[state.currentPlayerIndex].canPickTile = true;
         },
         loseRound: (state: GameVar): void => {
 
@@ -546,7 +535,6 @@ export const store = createStore({
 
             state.players[state.currentPlayerIndex].playing = false;
             state.players[state.currentPlayerIndex].canFixDice = false;
-            state.players[state.currentPlayerIndex].canPickTile = false;
             state.players[state.currentPlayerIndex].canThrowDice = false;
             state.players[state.currentPlayerIndex].diceValue = 0;
 
@@ -560,7 +548,6 @@ export const store = createStore({
             }
             state.players[state.currentPlayerIndex].playing = true;
             state.players[state.currentPlayerIndex].canThrowDice = true;
-            state.players[state.currentPlayerIndex].canPickTile = true;
         },
         adjustMessage: (state: GameVar, payLoad:Message): void => {
             state.message = payLoad;

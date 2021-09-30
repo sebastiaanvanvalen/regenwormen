@@ -36,13 +36,22 @@ export default defineComponent({
                 let message = 'it is not your turn to throw dice yet';
                 let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
                 this.adjustMessage(messageClass.getMessage());
-                this.loseRound();
-            } else {
+                // this.loseRound();
+                return
+            } else if(this.player.playing === true && this.players[this.currentPlayerIndex].canThrowDice === false) {
+                let message = 'You need to pick dice first!';
+                let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
+                this.adjustMessage(messageClass.getMessage());
+            }else {
                 this.throwDice();
+                console.log("checking rolled dice:")
+                console.log(this.fixedDice)
+                console.log(this.allDice)
             }
 
             this.checkDice();
 
+            // is this function needed here?
             // do we have a winner?
             if( this.tiles.filter(tile => tile.active).length === 0) {
                 this.players.forEach(element =>{
@@ -50,11 +59,20 @@ export default defineComponent({
                 })
                 this.endGame()
                 if(this.players[this.currentPlayerIndex].doodleScore < this.players[opponentIndex].doodleScore) {
-                    console.log(this.players[opponentIndex].name + " wins");
+                let message = this.players[opponentIndex].name + " wins";
+                let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
+                this.adjustMessage(messageClass.getMessage());
+
                 } else if (this.players[this.currentPlayerIndex].doodleScore === this.players[opponentIndex].doodleScore){
-                    console.log("it's a tie!");
+                let message = "Dear players, it's a tie!";
+                let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
+                this.adjustMessage(messageClass.getMessage());
+
                 }else {
-                    console.log(this.players[this.currentPlayerIndex].name + " wins");
+                let message = this.players[this.currentPlayerIndex].name + " wins!!!";
+                let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
+                this.adjustMessage(messageClass.getMessage());
+
                 }
             }
         },
@@ -68,8 +86,11 @@ export default defineComponent({
                         this.fixedDice.map(dice => dice.value).includes(val)
                     )
             ) {
+                console.log("conflicting values(button.vue :71)")
+                console.log(this.fixedDice)
+                console.log(this.allDice)
                 // unable to fix dice because of conflicting values
-                let message = 'unfortinately you threw all dice without collecting a doodle. Good luck next time.';
+                let message = 'unfortinately, the dice you threw contained only values you allready have.';
                 let messageClass = new MessageClass("none", this.players[this.currentPlayerIndex].name, message, "none", true );
                 this.adjustMessage(messageClass.getMessage());
                     this.loseRound();

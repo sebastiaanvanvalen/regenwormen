@@ -1,9 +1,25 @@
 so we are making this game in the first place for a friend. Or actually me. Because it turned out this is THE game where I can finaly beat him by rockhard old fashion luck.
 
-At this point I need to search for bugs and optimalisations. So what came up:
+
+Goals:
+- Host game on AWS,
+- Private connection for a colleague and me.
+- add chat?
+
+- AI to get to play against computer
+- DB for storing all choices and maybe use machine learning for creating better AI
+
+
+styling
+    - tilewrap (when only 1 tile wraps...)
+    - animation when tile leaves and enters the table
+    - dice animations
+    - dice, tile and message sounds. (message types come in handy)
+    - loginForm to create an actual player
+    - background colors/doodles
+    - sometimes we need a timeout to actualy see the dice combi before the script deletes everything
 
 errors:
-
 - many styling errors
 
 

@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="board-container">
-            <Messages />
             <Player :player="this.$store.state.players[1]" />
             <Tiles />
             <Player :player="this.$store.state.players[0]" />
@@ -15,7 +14,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Player from "./Player.vue";
-import Messages from "./Messages.vue";
 import Tiles from "./Tiles.vue";
 import DiceBoard from "./DiceBoard.vue";
 
@@ -23,7 +21,6 @@ export default defineComponent({
     name: "Board",
     components: {
         Player,
-        Messages,
         Tiles,
         DiceBoard,
     },

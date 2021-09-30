@@ -1,18 +1,22 @@
 <template>
     <div class="tiles-container">
-        <Tile v-for="tile in tiles" :key="tile.id" :tile="tile" />
+        <Messages />
+
+            <Tile v-for="tile in tiles" :key="tile.id" :tile="tile" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Tile from "./Tile.vue";
 import { mapState } from "vuex";
+import Messages from "./Messages.vue";
+import Tile from "./Tile.vue";
 
 export default defineComponent({
     name: "Tiles",
     components: {
         Tile,
+        Messages
     },
     computed: {
         ...mapState(["tiles"])
@@ -27,10 +31,10 @@ export default defineComponent({
         width: 100%;
         justify-content: center;
         align-items: center;
-        padding: 16px;
+        padding: 8px 16px 16px;
         border-radius: 5px;
         background-color: green;
-        height: 200px;
+        height: auto;
         max-width: 100%;
     }
 </style>

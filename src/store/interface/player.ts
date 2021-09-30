@@ -6,7 +6,6 @@ export interface Player {
     playing: boolean;
     canThrowDice: boolean;
     canFixDice: boolean;
-    canPickTile: boolean;
     winStatus: boolean;
     tilePile: Tile[];
     diceValue: number;

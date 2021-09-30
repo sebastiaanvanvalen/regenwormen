@@ -41,7 +41,7 @@ export default defineComponent({
         border: 2px solid green;
         border-radius: 5px;
         height: 100%;
-        background-color: lightseagreen;
+        background-color: rgb(134, 185, 219);
 
         .cont {
             width: 30%;

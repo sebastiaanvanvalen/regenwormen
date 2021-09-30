@@ -47,8 +47,8 @@ export default defineComponent({
                     break;
                 case 2:
                     style = {
-                        top: "32.5px",
-                        left: "7.5px",
+                        top: "calc(50% + 7.5px)",
+                        left: "calc(50% - 17.5px)",
                         display: "inline-block",
                         boxShadow: "25px -25px black",
                     }
@@ -64,8 +64,8 @@ export default defineComponent({
                     break;
                 case 4:
                     style = {
-                        top: "32.5px",
-                        left: "7.5px",
+                        top: "calc(50% + 7.5px)",
+                        left: "calc(50% - 17.5px)",
                         display: "inline-block",
                         boxShadow: "25px 0px black, 0px -25px black, 25px -25px black",
                     }
